@@ -119,6 +119,7 @@ class SongManager {
           servers = [];
         }
       }
+      console.log("🔓 Unlock servers:", servers, "isElectron:", isElectron);
       if (servers.length === 0) return null;
       // 并发请求
       const promises = servers.map((server) =>

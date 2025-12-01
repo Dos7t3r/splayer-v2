@@ -425,7 +425,7 @@ class Player {
               playerUrl = null;
             }
           }
-
+          console.log("🎵 Final playerUrl:", playerUrl);
           if (!playerUrl) {
             window.$message.error("该歌曲暂无音源，跳至下一首");
             await this.nextOrPrev("next");
@@ -460,6 +460,7 @@ class Player {
     const settingStore = useSettingStore();
     // 检查播放器状态
     if (!audioManager.src) {
+      console.warn("⚠️ audioManager.src is empty!");
       window.$message.warning("播放器未就绪，请稍后重试");
       return;
     }

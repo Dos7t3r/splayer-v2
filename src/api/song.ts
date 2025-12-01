@@ -58,6 +58,7 @@ export const unlockSongUrl = async (id: number, keyword: string, server: SongUnl
         params: { types: "url", id },
         timeout: 10000,
       });
+      console.log("🔓 GD Response:", response.data);
       if (response.data && response.data.url) {
         window.$message?.success("解析成功 - GD音乐台");
         return { code: 200, url: response.data.url, source: "GD音乐台" };
