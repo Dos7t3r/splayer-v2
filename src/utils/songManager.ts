@@ -83,9 +83,9 @@ class SongManager {
     const normalizedUrl = isElectron
       ? songData.url
       : songData.url
-          .replace(/^http:/, "https:")
-          .replace(/m804\.music\.126\.net/g, "m801.music.126.net")
-          .replace(/m704\.music\.126\.net/g, "m701.music.126.net");
+        .replace(/^http:/, "https:")
+        .replace(/m804\.music\.126\.net/g, "m801.music.126.net")
+        .replace(/m704\.music\.126\.net/g, "m701.music.126.net");
     // 若为试听且未开启试听播放，则将 url 置为空，仅标记为试听
     const finalUrl = isTrial && !settingStore.playSongDemo ? null : normalizedUrl;
     // 获取音质
@@ -107,9 +107,18 @@ class SongManager {
       if (!songId || !keyWord) return null;
       // 获取音源列表
       const settingStore = useSettingStore();
-      const servers = settingStore.songUnlockServer
+      let servers = settingStore.songUnlockServer
         .filter((server) => server.enabled)
         .map((server) => server.key);
+
+      // Web 端强制只使用 GD 音乐台，避免 CORS 问题
+      if (!isElectron) {
+        if (servers.includes(SongUnlockServer.NETEASE)) {
+          servers = [SongUnlockServer.NETEASE];
+        } else {
+          servers = [];
+        }
+      }
       if (servers.length === 0) return null;
       // 并发请求
       const promises = servers.map((server) =>
@@ -202,7 +211,7 @@ class SongManager {
       if (!songId) {
         return null;
       }
-      const canUnlock = isElectron && nextSong.type !== "radio" && settingStore.useSongUnlock;
+      const canUnlock = nextSong.type !== "radio" && settingStore.useSongUnlock;
       // 先请求官方地址
       const { url: officialUrl, isTrial, quality } = await this.getOnlineUrl(songId);
       if (officialUrl && !isTrial) {

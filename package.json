@@ -24,6 +24,7 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "node scripts/dev.mjs",
+    "dev:web": "vite",
     "build": "npx rimraf dist && npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:web": "npm run build",

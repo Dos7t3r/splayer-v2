@@ -86,10 +86,15 @@ export default defineConfig(({ command, mode }) => {
         port: webPort,
         // 代理
         proxy: {
-          "/api": {
-            target: `http://127.0.0.1:${servePort}`,
+          "/api/netease": {
+            target: "http://localhost:3000",
             changeOrigin: true,
-            rewrite: (path) => path.replace(/^\/api/, "/api"),
+            rewrite: (path) => path.replace(/^\/api\/netease/, ""),
+          },
+          "/api/unblock": {
+            target: "http://localhost:3000",
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api\/unblock/, "/unblock"),
           },
         },
       },

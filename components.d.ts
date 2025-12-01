@@ -13,6 +13,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AboutSetting: typeof import('./src/components/Setting/AboutSetting.vue')['default']
     ArtistList: typeof import('./src/components/List/ArtistList.vue')['default']
+    AuthLock: typeof import('./src/components/Global/AuthLock.vue')['default']
     AutoClose: typeof import('./src/components/Modal/AutoClose.vue')['default']
     BackgroundRender: typeof import('./src/components/Special/BackgroundRender.vue')['default']
     BatchList: typeof import('./src/components/Modal/BatchList.vue')['default']

@@ -47,8 +47,28 @@ export const songUrl = (
   });
 };
 
+import axios from "axios";
+
 // 获取解锁歌曲 URL
-export const unlockSongUrl = (id: number, keyword: string, server: SongUnlockServer) => {
+export const unlockSongUrl = async (id: number, keyword: string, server: SongUnlockServer) => {
+  // 特殊处理: GD音乐台 (NETEASE) 改为前端直连，避开 Vercel IP 封锁
+  if (server === SongUnlockServer.NETEASE) {
+    try {
+      const response = await axios.get("https://music-api.gdstudio.xyz/api.php", {
+        params: { types: "url", id },
+        timeout: 10000,
+      });
+      if (response.data && response.data.url) {
+        window.$message?.success("解析成功 - GD音乐台");
+        return { code: 200, url: response.data.url, source: "GD音乐台" };
+      }
+      return { code: 404, message: "未找到链接" };
+    } catch (error) {
+      console.error("GD音乐台直连失败:", error);
+      return { code: 500, message: "请求失败" };
+    }
+  }
+
   const params = server === SongUnlockServer.NETEASE ? { id } : { keyword };
   return request({
     baseURL: "/api/unblock",

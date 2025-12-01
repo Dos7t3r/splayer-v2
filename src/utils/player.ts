@@ -400,7 +400,7 @@ class Player {
             statusStore.playUblock = cached.ublock;
             statusStore.songQuality = cached.quality;
           } else {
-            const canUnlock = isElectron && type !== "radio" && settingStore.useSongUnlock;
+            const canUnlock = type !== "radio" && settingStore.useSongUnlock;
             const { url: officialUrl, isTrial, quality } = await songManager.getOnlineUrl(songId);
             // 更新音质
             statusStore.songQuality = quality;
@@ -895,6 +895,7 @@ class Player {
    * @param deviceId 输出设备
    */
   public toggleOutputDevice(deviceId?: string) {
+    if (!isElectron) return;
     try {
       const settingStore = useSettingStore();
       const device = deviceId ?? settingStore.playDevice;
