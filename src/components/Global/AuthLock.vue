@@ -11,6 +11,13 @@
         <n-h2 style="margin: 0">访问受限</n-h2>
       </div>
       <n-text depth="3">此站点已开启私有化访问限制</n-text>
+      
+      <n-collapse-transition :show="!!feedbackMsg">
+        <n-alert :type="feedbackType" :show-icon="false" style="margin-bottom: 12px; text-align: left">
+          {{ feedbackMsg }}
+        </n-alert>
+      </n-collapse-transition>
+
       <n-input
         v-model:value="password"
         type="password"
@@ -18,6 +25,7 @@
         show-password-on="click"
         @keydown.enter="verify"
         :status="error ? 'error' : undefined"
+        autofocus
       />
       <n-button type="primary" block @click="verify" :loading="loading">
         解锁进入
@@ -34,6 +42,8 @@ const isLocked = ref(false);
 const password = ref("");
 const loading = ref(false);
 const error = ref(false);
+const feedbackMsg = ref("");
+const feedbackType = ref<"success" | "error">("error");
 const message = useMessage();
 
 // 读取环境变量
@@ -50,16 +60,31 @@ onMounted(() => {
 });
 
 const verify = () => {
+  if (!password.value) return;
   loading.value = true;
+  feedbackMsg.value = "";
+  
   // 简单模拟延迟，防止爆破
   setTimeout(() => {
     if (password.value === adminKey) {
       localStorage.setItem("splayer_auth", adminKey);
-      message.success("验证通过，欢迎回来");
-      isLocked.value = false;
-      error.value = false;
+      // 尝试全局提示
+      try { message.success("验证通过，欢迎回来"); } catch(e) {}
+      // 内部提示
+      feedbackType.value = "success";
+      feedbackMsg.value = "验证通过";
+      
+      setTimeout(() => {
+        isLocked.value = false;
+        error.value = false;
+      }, 500);
     } else {
-      message.error("密码错误");
+      // 尝试全局提示
+      try { message.error("密码错误"); } catch(e) {}
+      // 内部提示
+      feedbackType.value = "error";
+      feedbackMsg.value = "密码错误，请重试";
+      
       error.value = true;
       password.value = "";
     }
@@ -82,6 +107,7 @@ const verify = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-app-region: no-drag; /* 修复无法点击的问题 */
 }
 
 .lock-container {
