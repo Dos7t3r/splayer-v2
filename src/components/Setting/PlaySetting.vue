@@ -224,7 +224,7 @@
           class="set"
         />
       </n-card>
-      <n-card v-if="isElectron" class="set-item">
+      <n-card class="set-item">
         <div class="label">
           <n-text class="name">音乐频谱</n-text>
           <n-text class="tip" :depth="3">

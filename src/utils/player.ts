@@ -134,7 +134,7 @@ class Player {
       const statusStore = useStatusStore();
       statusStore.playLoading = false;
       // 恢复均衡器
-      if (isElectron && statusStore.eqEnabled) {
+      if (statusStore.eqEnabled) {
         // 简单恢复 EQ 增益
         const bands = statusStore.eqBands;
         if (bands && bands.length === 10) {
