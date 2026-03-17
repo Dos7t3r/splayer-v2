@@ -5,6 +5,8 @@ import type { PlayModeType, RGB, ColorScheme } from "@/types/main";
 interface StatusState {
   /** 菜单折叠状态 */
   menuCollapsed: boolean;
+  /** 移动端菜单显示 / Sidebar drawer */
+  mobileMenuShow: boolean;
   /** 搜索框状态 */
   searchFocus: boolean;
   /** 搜索框输入值 */
@@ -96,6 +98,7 @@ interface StatusState {
 export const useStatusStore = defineStore("status", {
   state: (): StatusState => ({
     menuCollapsed: false,
+    mobileMenuShow: false,
     searchFocus: false,
     searchInputValue: "",
     showPlayBar: true,

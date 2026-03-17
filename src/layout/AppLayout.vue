@@ -9,8 +9,9 @@
       }"
       has-sider
     >
-      <!-- 侧边栏 -->
+      <!-- 侧边栏 (桌面端) -->
       <n-layout-sider
+        v-if="!isMobile"
         id="main-sider"
         :style="{
           height:
@@ -33,6 +34,19 @@
       >
         <Sider />
       </n-layout-sider>
+      
+      <!-- 侧边栏 (移动端 Drawer) -->
+      <n-drawer
+        v-else
+        v-model:show="statusStore.mobileMenuShow"
+        placement="left"
+        :width="240"
+      >
+        <n-drawer-content :body-style="{ padding: 0 }">
+          <Sider />
+        </n-drawer-content>
+      </n-drawer>
+
       <n-layout id="main-layout">
         <!-- 导航栏 -->
         <Nav id="main-header" />
@@ -47,7 +61,7 @@
             display: 'grid',
             gridTemplateRows: '1fr',
             minHeight: '100%',
-            padding: '0 24px',
+            padding: isMobile ? '0 12px' : '0 24px',
           }"
           position="absolute"
           embedded
@@ -82,10 +96,15 @@ import { useMusicStore, useStatusStore, useSettingStore } from "@/stores";
 import blob from "@/utils/blob";
 import { isElectron } from "@/utils/env";
 import init from "@/utils/init";
+import { useWindowSize } from "@vueuse/core";
 
 const musicStore = useMusicStore();
 const statusStore = useStatusStore();
 const settingStore = useSettingStore();
+
+// 响应式判断
+const { width } = useWindowSize();
+const isMobile = computed(() => width.value <= 768);
 
 // 主内容
 const contentRef = ref<HTMLElement | null>(null);

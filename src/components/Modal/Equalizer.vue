@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import { isElectron } from "@/utils/env";
 import { useStatusStore } from "@/stores";
 import { usePlayer } from "@/utils/player";
 
@@ -131,7 +130,13 @@ watch(enabled, () => applyEq());
     grid-template-columns: repeat(10, 1fr);
     gap: 12px;
     margin-top: 20px;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    padding-bottom: 12px;
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
     .eq-col {
+      min-width: 32px; /* Prevent shrinking too much */
       display: flex;
       flex-direction: column;
       align-items: center;

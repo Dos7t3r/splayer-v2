@@ -10,6 +10,7 @@
         v-model:value="activeKey"
         :options="menuOptions"
         :indent="10"
+        :mode="isMobile ? 'horizontal' : 'vertical'"
         @update:value="setScrollbar?.scrollTo({ top: 0, behavior: 'smooth' })"
       />
       <!-- 信息 -->
@@ -55,8 +56,12 @@ import type { SettingType } from "@/types/main";
 import { renderIcon } from "@/utils/helper";
 import packageJson from "@/../package.json";
 import { isElectron } from "@/utils/env";
+import { useWindowSize } from "@vueuse/core";
 
 const props = defineProps<{ type: SettingType }>();
+
+const { width } = useWindowSize();
+const isMobile = computed(() => width.value <= 768);
 
 // 设置内容
 const setScrollbar = ref<InstanceType<typeof NScrollbar> | null>(null);
@@ -117,6 +122,10 @@ const toGithub = () => {
   width: 100%;
   height: 75vh;
   min-height: 75vh;
+  flex-direction: row;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
   .set-left {
     display: flex;
     flex-direction: column;
@@ -124,20 +133,33 @@ const toGithub = () => {
     height: 100%;
     padding: 20px;
     background-color: var(--surface-container-hex);
-    .title {
-      margin: 10px 0 20px 10px;
-      .n-h1 {
-        font-size: 26px;
-        font-weight: bold;
-        margin-top: 0;
-        line-height: normal;
-        margin-bottom: 6px;
-      }
-    }
-    .n-menu {
+    @media (max-width: 768px) {
       width: 100%;
-      padding: 0;
+      height: auto;
+      padding: 12px;
     }
+      .title {
+        margin: 10px 0 20px 10px;
+        .n-h1 {
+          font-size: 26px;
+          font-weight: bold;
+          margin-top: 0;
+          line-height: normal;
+          margin-bottom: 6px;
+        }
+      }
+      .n-menu {
+        width: 100%;
+        padding: 0;
+        @media (max-width: 768px) {
+          overflow-x: auto;
+          white-space: nowrap;
+          /* hide scrollbar for horizontal menu */
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+      }
     .power {
       margin: auto 0 0 10px;
       .name {
@@ -159,6 +181,9 @@ const toGithub = () => {
         .n-icon {
           margin-right: 4px;
         }
+      }
+      @media (max-width: 768px) {
+        display: none; /* Hide bottom author info on mobile nav header */
       }
     }
   }
@@ -187,7 +212,9 @@ const toGithub = () => {
       flex: 1;
       padding: 0 40px;
       background-color: var(--background-hex);
-      // background-color: rgba(var(--surface-container), 0.28);
+      @media (max-width: 768px) {
+        padding: 12px 16px;
+      }
     }
     .set-list {
       margin-bottom: 30px;
@@ -221,6 +248,11 @@ const toGithub = () => {
         align-items: center;
         justify-content: space-between;
         padding: 16px;
+        @media (max-width: 768px) {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
       }
       .label {
         display: flex;
@@ -228,6 +260,9 @@ const toGithub = () => {
         padding-right: 20px;
         .name {
           font-size: 16px;
+        }
+        @media (max-width: 768px) {
+          padding-right: 0;
         }
       }
       .n-flex {
@@ -240,8 +275,8 @@ const toGithub = () => {
           width: max-content;
         }
         @media (max-width: 768px) {
-          width: 140px;
-          min-width: 140px;
+          width: 100%;
+          justify-content: flex-start;
         }
       }
     }

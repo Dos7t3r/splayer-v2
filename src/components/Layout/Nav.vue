@@ -1,13 +1,18 @@
 <template>
   <n-layout-header class="nav">
-    <!-- 页面导航 -->
-    <n-flex class="page-control">
-      <n-button :focusable="false" tertiary circle @click="router.go(-1)">
+    <!-- 页面导航 (Desktop) or Hamburger (Mobile) -->
+    <n-flex class="page-control" :wrap="false" align="center">
+      <n-button v-if="isMobile" :focusable="false" tertiary circle @click="statusStore.mobileMenuShow = true">
+        <template #icon>
+          <SvgIcon name="Menu" :size="26" />
+        </template>
+      </n-button>
+      <n-button v-if="!isMobile" :focusable="false" tertiary circle @click="router.go(-1)">
         <template #icon>
           <SvgIcon name="NavigateBefore" :size="26" />
         </template>
       </n-button>
-      <n-button :focusable="false" tertiary circle @click="router.go(1)">
+      <n-button v-if="!isMobile" :focusable="false" tertiary circle @click="router.go(1)">
         <template #icon>
           <SvgIcon name="NavigateNext" :size="26" />
         </template>
@@ -90,13 +95,18 @@
 
 <script setup lang="ts">
 import type { DropdownOption } from "naive-ui";
-import { useSettingStore } from "@/stores";
+import { useSettingStore, useStatusStore } from "@/stores";
 import { renderIcon } from "@/utils/helper";
 import { openSetting } from "@/utils/modal";
 import { isDev, isElectron } from "@/utils/env";
+import { useWindowSize } from "@vueuse/core";
 
 const router = useRouter();
 const settingStore = useSettingStore();
+const statusStore = useStatusStore();
+
+const { width } = useWindowSize();
+const isMobile = computed(() => width.value <= 768);
 
 const showCloseModal = ref(false);
 // 是否记住
@@ -226,10 +236,16 @@ onMounted(() => {
     align-items: center;
     height: 100%;
     margin-left: 12px;
+    flex-wrap: nowrap;
+    min-width: 0; // prevent flex child expanding too much
     .nav-drag {
       flex: 1;
       width: 100%;
       height: 100%;
+      display: none; // Disable drag on mobile/web anyway, or hide if it pushes stuff out
+      @media (min-width: 768px) {
+        display: block; // Show on desktop
+      }
     }
   }
   .client-control {
