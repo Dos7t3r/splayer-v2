@@ -56,17 +56,7 @@
                     ? player.addNextSong(item.data, true)
                     : player.updatePlayList(listData, item.data, playListId)
                 "
-                @contextmenu.stop="
-                  songListMenuRef?.openDropdown(
-                    $event,
-                    listData,
-                    item.data,
-                    index,
-                    type,
-                    playListId,
-                    isDailyRecommend,
-                  )
-                "
+                @contextmenu.stop="handleShowMenu($event, item.data, index)"
               />
               <!-- 加载更多 -->
               <div v-else-if="item.type === 'footer'" class="load-more">
@@ -82,6 +72,7 @@
       </Transition>
       <!-- 右键菜单 -->
       <SongListMenu ref="songListMenuRef" @removeSong="removeSong" />
+      <MobileSongMenu ref="mobileSongMenuRef" @removeSong="removeSong" />
       <!-- 列表操作 -->
       <Teleport to="body">
         <Transition name="fade" mode="out-in">
@@ -115,7 +106,9 @@ import { entries, isEmpty } from "lodash-es";
 import { sortOptions } from "@/utils/meta";
 import { renderIcon } from "@/utils/helper";
 import { usePlayer } from "@/utils/player";
+import { useMobile } from "@/composables/useMobile";
 import SongListMenu from "@/components/Menu/SongListMenu.vue";
+import MobileSongMenu from "@/components/Menu/MobileSongMenu.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -179,6 +172,25 @@ const floatToolShow = ref<boolean>(true);
 
 // 右键菜单
 const songListMenuRef = ref<InstanceType<typeof SongListMenu> | null>(null);
+const mobileSongMenuRef = ref<InstanceType<typeof MobileSongMenu> | null>(null);
+
+const { isSmallScreen } = useMobile();
+
+const handleShowMenu = (e: MouseEvent, song: SongType, index: number) => {
+  if (isSmallScreen.value) {
+    mobileSongMenuRef.value?.open(song, index, props.playListId, props.isDailyRecommend);
+  } else {
+    songListMenuRef.value?.openDropdown(
+      e,
+      listData.value,
+      song,
+      index,
+      props.type,
+      props.playListId,
+      props.isDailyRecommend,
+    );
+  }
+};
 
 // 列表数据
 const listData = computed<SongType[]>(() => {

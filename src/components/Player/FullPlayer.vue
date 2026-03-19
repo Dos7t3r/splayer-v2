@@ -12,8 +12,12 @@
       >
         <!-- 背景 -->
         <PlayerBackground />
-        <!-- 独立歌词 -->
-        <Transition name="fade" mode="out-in">
+        <!-- 移动端 -->
+        <FullPlayerMobile v-if="isTablet" />
+        <!-- 桌面端 -->
+        <template v-else>
+          <!-- 独立歌词 -->
+          <Transition name="fade" mode="out-in">
           <div
             v-if="isShowComment && !statusStore.pureLyricMode"
             :key="instantLyrics.content"
@@ -67,13 +71,14 @@
         </Transition>
         <!-- 控制中心 -->
         <PlayerControl @mouseenter.stop="stopHide" @mouseleave.stop="playerMove" />
-        <!-- 音乐频谱 -->
-        <PlayerSpectrum
-          v-if="settingStore.showSpectrums"
-          :color="statusStore.mainColor ? `rgb(${statusStore.mainColor})` : 'rgb(239 239 239)'"
-          :show="!statusStore.playerMetaShow"
-          :height="60"
-        />
+          <!-- 音乐频谱 -->
+          <PlayerSpectrum
+            v-if="settingStore.showSpectrums"
+            :color="statusStore.mainColor ? `rgb(${statusStore.mainColor})` : 'rgb(239 239 239)'"
+            :show="!statusStore.playerMetaShow"
+            :height="60"
+          />
+        </template>
       </div>
     </Transition>
   </Teleport>
@@ -82,10 +87,14 @@
 <script setup lang="ts">
 import { useStatusStore, useMusicStore, useSettingStore } from "@/stores";
 import { isElectron } from "@/utils/env";
+import { useMobile } from "@/composables/useMobile";
+import FullPlayerMobile from "./FullPlayerMobile.vue";
 
 const musicStore = useMusicStore();
 const statusStore = useStatusStore();
 const settingStore = useSettingStore();
+
+const { isTablet } = useMobile();
 
 // 是否显示评论
 const isShowComment = computed<boolean>(
@@ -263,34 +272,6 @@ onBeforeUnmount(() => {
       .content-right {
         opacity: 0;
         pointer-events: none;
-      }
-    }
-    @media (max-width: 768px) {
-      flex-direction: column;
-      justify-content: flex-start;
-      height: calc(100vh - 120px);
-      margin-top: 20px;
-      .content-left {
-        position: relative;
-        width: 100%;
-        min-width: 100%;
-        height: 100%;
-        transform: translateX(0) !important;
-      }
-      .content-right {
-        position: relative;
-        width: 100%;
-        max-width: 100%;
-        height: 100%;
-        margin-top: 0px;
-        display: none;
-      }
-      &.pure .content-right {
-        display: flex;
-        margin-top: 0px;
-      }
-      &.no-lrc .content-left {
-        transform: translateX(0);
       }
     }
   }
