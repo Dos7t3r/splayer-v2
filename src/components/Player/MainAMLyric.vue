@@ -166,6 +166,16 @@ onBeforeUnmount(() => {
   :lang(ja) {
     font-family: var(--ja-font-family);
   }
+
+  @media (max-width: 768px) {
+    :deep(.am-lyric) {
+      padding: 0 12px;
+      --amll-lyric-player-font-size: calc(v-bind('settingStore.lyricFontSize') * 0.75px) !important;
+    }
+    &.pure :deep(.am-lyric) {
+      padding: 0 16px;
+    }
+  }
 }
 
 .lyric-loading {

@@ -274,15 +274,20 @@ onBeforeUnmount(() => {
         position: relative;
         width: 100%;
         min-width: 100%;
-        height: 40vh;
+        height: 100%;
         transform: translateX(0) !important;
       }
       .content-right {
         position: relative;
         width: 100%;
         max-width: 100%;
-        height: 40vh;
-        margin-top: 20px;
+        height: 100%;
+        margin-top: 0px;
+        display: none;
+      }
+      &.pure .content-right {
+        display: flex;
+        margin-top: 0px;
       }
       &.no-lrc .content-left {
         transform: translateX(0);

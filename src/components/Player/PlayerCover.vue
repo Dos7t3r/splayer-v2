@@ -1,5 +1,5 @@
 <template>
-  <div :class="['player-cover', settingStore.playerType, { playing: statusStore.playStatus }]">
+  <div :class="['player-cover', settingStore.playerType, { playing: statusStore.playStatus }]" @click="statusStore.pureLyricMode = !statusStore.pureLyricMode" style="cursor: pointer;">
     <!-- 指针 -->
     <img
       v-if="settingStore.playerType === 'record'"

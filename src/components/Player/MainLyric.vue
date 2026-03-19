@@ -623,6 +623,21 @@ onBeforeUnmount(() => {
       filter: blur(0) !important;
     }
   }
+  @media (max-width: 768px) {
+    .lrc-line {
+      margin: 4px 0;
+      padding: 8px 12px;
+      .content {
+        font-size: calc(var(--lrc-size) * 0.75) !important;
+      }
+      .tran {
+        font-size: calc(var(--lrc-tran-size) * 0.8) !important;
+      }
+      .roma {
+        font-size: calc(var(--lrc-roma-size) * 0.8) !important;
+      }
+    }
+  }
 }
 </style>
 
