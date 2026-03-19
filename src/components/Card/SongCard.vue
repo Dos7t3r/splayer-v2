@@ -421,6 +421,14 @@ const localCover = async (show: boolean) => {
       width: 80px;
     }
   }
+  @media (max-width: 768px) {
+    .album, .actions, .meta.date, .meta.size {
+      display: none !important;
+    }
+    .title {
+      padding-right: 4px;
+    }
+  }
   &.header {
     border: none;
     background-color: transparent;

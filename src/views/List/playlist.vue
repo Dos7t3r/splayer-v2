@@ -704,6 +704,33 @@ onMounted(() => getPlaylistDetail(playlistId.value));
           }
         }
       }
+      @media (max-width: 768px) {
+        padding-right: 0px;
+        .name {
+          font-size: 20px;
+          margin-bottom: 4px;
+        }
+        .collapse {
+          top: 32px;
+          .meta .item:not(:first-child) {
+            display: none;
+          }
+        }
+        .menu {
+          .search {
+            width: 100px;
+            &.n-input--focus {
+              width: 120px;
+            }
+          }
+        }
+      }
+    }
+    @media (max-width: 768px) {
+      height: 160px;
+      .cover {
+        margin-right: 12px;
+      }
     }
   }
   .song-list,
@@ -713,6 +740,9 @@ onMounted(() => getPlaylistDetail(playlistId.value));
     transition:
       padding 0.3s,
       opacity 0.3s;
+    @media (max-width: 768px) {
+      padding-top: 160px;
+    }
   }
   &.small {
     .detail {

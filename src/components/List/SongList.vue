@@ -433,6 +433,11 @@ onBeforeUnmount(() => {
         width: 80px;
       }
     }
+    @media (max-width: 768px) {
+      .album, .actions, .meta.date, .meta.size {
+        display: none !important;
+      }
+    }
   }
   .virtual-list-wrapper {
     height: 100%;

@@ -265,6 +265,29 @@ onBeforeUnmount(() => {
         pointer-events: none;
       }
     }
+    @media (max-width: 768px) {
+      flex-direction: column;
+      justify-content: flex-start;
+      height: calc(100vh - 120px);
+      margin-top: 20px;
+      .content-left {
+        position: relative;
+        width: 100%;
+        min-width: 100%;
+        height: 40vh;
+        transform: translateX(0) !important;
+      }
+      .content-right {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        height: 40vh;
+        margin-top: 20px;
+      }
+      &.no-lrc .content-left {
+        transform: translateX(0);
+      }
+    }
   }
   &.show-comment {
     .player-content {

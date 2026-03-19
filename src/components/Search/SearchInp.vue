@@ -191,6 +191,12 @@ onMounted(() => {
     &.focus {
       width: 300px;
     }
+    @media (max-width: 768px) {
+      width: 140px;
+      &.focus {
+        width: 180px;
+      }
+    }
   }
   .search-mask {
     position: fixed;
